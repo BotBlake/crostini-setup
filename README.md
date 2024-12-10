@@ -7,7 +7,8 @@ A setup script for configuring the Crostini Linux VM on Chromebooks. This script
 - Installs essential tools (`curl`, `wget`, `git`, `vim`, etc.).
 - Configures libraries for i386 compatibility.
 - Sets up Python development environment.
-- Installs Jellyfin and VSCode optionally.
+- Installs Jellyfin, VSCode, Discord, MediaPlayers optionally.
+- Custom builds makemkv with extended codec support optionally.
 - Performs system updates and cleanups.
 
 ## Prerequisites
@@ -23,7 +24,7 @@ A setup script for configuring the Crostini Linux VM on Chromebooks. This script
    
 2. Make the script executable:
     ```bash
-    chmod +x crostini-setup.sh
+    chmod +x ./install.sh
     ```
 3. Run the script with root privileges:
     ```bash
