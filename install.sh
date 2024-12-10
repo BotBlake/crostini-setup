@@ -99,7 +99,8 @@ if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
     echo "Installing build dependencies..."
     sudo apt-get install -y build-essential pkg-config libc6-dev libssl-dev libexpat1-dev \
                             libavcodec-dev libgl1-mesa-dev qtbase5-dev zlib1g-dev \
-                            libfdk-aac-dev libx264-dev libx265-dev libvpx-dev libopus-dev
+                            libfdk-aac-dev libx264-dev libx265-dev libvpx-dev libopus-dev \
+                            nasm
 
     # Create a temporary directory for the build
     BUILD_DIR=$(mktemp -d)
