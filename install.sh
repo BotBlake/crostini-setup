@@ -51,3 +51,10 @@ echo "Cleaning up unused packages..."
 apt autoremove -y && apt clean
 
 echo "Configuration completed!"
+
+# Jellyfin
+read -p "Do you want to install Jellyfin? (y/n): " answer
+if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+    echo "Installing Jellyfin..."
+    curl https://repo.jellyfin.org/install-debuntu.sh | sudo bash
+fi
