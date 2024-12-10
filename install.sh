@@ -80,3 +80,21 @@ if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
     sudo apt install -y ./discord.deb
     rm ./discord.deb
 fi
+
+# Media Player Tooling
+read -p "Do you want to extend Media playback support? (y/n): " answer
+if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+    echo "Installing VLC media player..."
+    apt install -y vlc
+    echo "Installing multimedia codecs..."
+    apt install -y ffmpeg libavcodec-extra
+fi
+
+# MakeMKV
+read -p "Do you want to install makemkv? (y/n): " answer
+if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+    echo "Installing VLC media player..."
+    apt install -y vlc
+    echo "Installing multimedia codecs..."
+    apt install -y ffmpeg libavcodec-extra
+fi
