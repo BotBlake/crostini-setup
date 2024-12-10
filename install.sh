@@ -50,6 +50,10 @@ apt install -y libgl1-mesa-dri:i386 libgl1-mesa-glx:i386 libc6:i386 libc6-i386
 echo "Cleaning up unused packages..."
 apt autoremove -y && apt clean
 
+# Installing Python-dev
+echo "Installing Python-Dev"
+sudo apt-get install -y python3-pip python3-dev python3-venv build-essential libssl-dev libffi-dev
+
 echo "Configuration completed!"
 
 # Jellyfin
@@ -57,4 +61,12 @@ read -p "Do you want to install Jellyfin? (y/n): " answer
 if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
     echo "Installing Jellyfin..."
     curl https://repo.jellyfin.org/install-debuntu.sh | sudo bash
+fi
+
+# VSCode
+read -p "Do you want to install VSCode? (y/n): " answer
+if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+    echo "Installing Visual Studio Code..."
+    sudo apt-get install -y gnome-keyring
+    curl -o code.deb -L http://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb
 fi
