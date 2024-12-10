@@ -69,4 +69,14 @@ if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
     echo "Installing Visual Studio Code..."
     sudo apt-get install -y gnome-keyring
     curl -o code.deb -L http://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb
+    rm ./code.deb
+fi
+
+# Discord
+read -p "Do you want to install Discord? (y/n): " answer
+if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+    echo "Installing Discord..."
+    curl -L -o discord.deb "https://discord.com/api/download/stable?platform=linux&format=deb"
+    sudo apt install -y ./discord.deb
+    rm ./discord.deb
 fi
