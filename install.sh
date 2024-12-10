@@ -98,3 +98,68 @@ if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
     echo "Installing multimedia codecs..."
     apt install -y ffmpeg libavcodec-extra
 fi
+
+# MakeMKV Build and Installation
+read -p "Do you want to build and install MakeMKV with extended codec support? (y/n): " answer
+if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+    echo "Building and installing MakeMKV with extended codec support..."
+
+    # Install prerequisites
+    echo "Installing build dependencies..."
+    sudo apt-get install -y build-essential pkg-config libc6-dev libssl-dev libexpat1-dev \
+                            libavcodec-dev libgl1-mesa-dev qtbase5-dev zlib1g-dev \
+                            libfdk-aac-dev libx264-dev libx265-dev libvpx-dev libopus-dev
+
+    # Create a temporary directory for the build
+    BUILD_DIR=$(mktemp -d)
+    cd $BUILD_DIR
+
+    # Download MakeMKV sources
+    echo "Downloading MakeMKV source and binary packages..."
+    curl -LO https://www.makemkv.com/download/makemkv-oss-1.17.8.tar.gz
+    curl -LO https://www.makemkv.com/download/makemkv-bin-1.17.8.tar.gz
+
+    # Extract the source and binary packages
+    echo "Extracting MakeMKV packages..."
+    tar -xzf makemkv-oss-1.17.8.tar.gz
+    tar -xzf makemkv-bin-1.17.8.tar.gz
+
+    # Build and install MakeMKV OSS
+    echo "Building MakeMKV OSS..."
+    cd makemkv-oss-1.17.8
+    ./configure
+    make
+    sudo make install
+    cd ..
+
+    # Build and install MakeMKV Binary
+    echo "Building MakeMKV Binary..."
+    cd makemkv-bin-1.17.8
+    make
+    sudo make install
+    cd ..
+
+    # Build custom FFmpeg
+    echo "Building custom FFmpeg with extended codec support..."
+    curl -LO https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
+    tar -xjf ffmpeg-snapshot.tar.bz2
+    cd ffmpeg
+    ./configure --prefix=/tmp/ffmpeg --enable-static --disable-shared --enable-pic \
+                --enable-gpl --enable-nonfree --enable-libfdk-aac --enable-libx264 \
+                --enable-libx265 --enable-libvpx --enable-libopus
+    make -j$(nproc)
+    make install
+
+    # Build MakeMKV OSS with custom FFmpeg
+    echo "Rebuilding MakeMKV OSS with custom FFmpeg..."
+    cd ../makemkv-oss-1.17.8
+    PKG_CONFIG_PATH=/tmp/ffmpeg/lib/pkgconfig ./configure
+    make
+    sudo make install
+
+    # Cleanup
+    echo "Cleaning up temporary files..."
+    rm -rf $BUILD_DIR /tmp/ffmpeg
+
+    echo "MakeMKV installation and setup complete!"
+fi
