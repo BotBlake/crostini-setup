@@ -1,22 +1,53 @@
 #!/bin/bash
 
-set -ex
+set -euo pipefail
 
-# A lot of Software requires i396 architecture
-echo "Adding i386 architecture"
-sudo dpkg --add-architecture i386
+# Check for root privileges
+if [[ $EUID -ne 0 ]]; then
+  echo "This script must be run as root. Please use 'sudo'." >&2
+  exit 1
+fi
 
-# Add sources
-echo "Adding non-free sources"
-sudo chmod a+rwx /etc/apt/sources.list && sudo echo 'deb http://deb.debian.org/debian/ stable main contrib non-free' > /etc/apt/sources.list
+# Redirect output to a log file
+LOGFILE="/var/log/crostini_setup.log"
+exec > >(tee -i $LOGFILE) 2>&1
 
-# reload apt
-echp "Updating APT"
-sudo apt update && sudo apt upgrade -y
+echo "Starting configuration script for Crostini VM..."
 
-# Install Packages
-echo "Installing exFat"
-sudo apt install exfat-fuse exfatprogs -y
+# Backing up /etc/apt/sources.list
+echo "Backing up /etc/apt/sources.list..."
+cp /etc/apt/sources.list /etc/apt/sources.list.bak
 
-#echo "Installing additional libraries"
-#sudo apt install libgl1-mesa-dri:i386 libgl1-mesa-glx:i386 libc6:i386 libc6-i386 -y
+# Adding i386 architecture
+echo "Adding i386 architecture..."
+dpkg --add-architecture i386
+
+# Adding non-free sources
+echo "Adding non-free sources..."
+if ! grep -q "deb http://deb.debian.org/debian/ stable main contrib non-free" /etc/apt/sources.list; then
+  echo "deb http://deb.debian.org/debian/ stable main contrib non-free" >> /etc/apt/sources.list
+else
+  echo "Sources already present."
+fi
+
+# Updating and upgrading the system
+echo "Updating APT and upgrading the system..."
+apt update && apt upgrade -y
+
+# Installing exFAT tools
+echo "Installing exFAT tools..."
+apt install -y exfat-fuse exfatprogs
+
+# Installing additional essential tools
+echo "Installing essential tools..."
+apt install -y curl wget git build-essential vim htop
+
+# Installing i386 libraries
+echo "Installing i386 libraries..."
+apt install -y libgl1-mesa-dri:i386 libgl1-mesa-glx:i386 libc6:i386 libc6-i386
+
+# Cleaning up unused packages
+echo "Cleaning up unused packages..."
+apt autoremove -y && apt clean
+
+echo "Configuration completed!"
