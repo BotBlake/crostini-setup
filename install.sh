@@ -123,6 +123,11 @@ if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
     sudo make install
     cd ..
 
+    # Auto-accept EULA for MakeMKV Binary
+    echo "Auto-accepting MakeMKV EULA..."
+    mkdir -p ./tmp
+    echo "yes" > ./tmp/eula_accepted
+
     # Build and install MakeMKV Binary
     echo "Building MakeMKV Binary..."
     cd makemkv-bin-1.17.8
