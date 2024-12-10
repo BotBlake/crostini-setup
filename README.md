@@ -17,7 +17,7 @@ A setup script for configuring the Crostini Linux VM on Chromebooks. This script
 ## Usage
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/crostini-setup.git
+   git clone https://github.com/BotBlake/crostini-setup.git
    cd crostini-setup
     ```
    
