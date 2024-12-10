@@ -90,15 +90,6 @@ if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
     apt install -y ffmpeg libavcodec-extra
 fi
 
-# MakeMKV
-read -p "Do you want to install makemkv? (y/n): " answer
-if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
-    echo "Installing VLC media player..."
-    apt install -y vlc
-    echo "Installing multimedia codecs..."
-    apt install -y ffmpeg libavcodec-extra
-fi
-
 # MakeMKV Build and Installation
 read -p "Do you want to build and install MakeMKV with extended codec support? (y/n): " answer
 if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
