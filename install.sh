@@ -54,6 +54,23 @@ apt autoremove -y && apt clean
 echo "Installing Python-Dev"
 sudo apt-get install -y python3-pip python3-dev python3-venv build-essential libssl-dev libffi-dev
 
+# ADB
+echo "Downloading Android Debug Bridge"
+INSTALL_DIR="$HOME/platform-tools"
+ZIP_FILE="platform-tools-latest-linux.zip"
+
+wget -c https://dl.google.com/android/repository/$ZIP_FILE -O /tmp/$ZIP_FILE
+unzip -o /tmp/$ZIP_FILE -d $HOME
+
+# Pfad hinzufügen
+if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
+    echo "Adding $INSTALL_DIR to PATH..."
+    echo "export PATH=\"$INSTALL_DIR:\$PATH\"" >> $HOME/.bashrc
+    source $HOME/.bashrc
+fi
+rm /tmp/$ZIP_FILE
+
+
 echo "Configuration completed!"
 
 # Jellyfin
