@@ -54,22 +54,25 @@ apt autoremove -y && apt clean
 echo "Installing Python-Dev"
 sudo apt-get install -y python3-pip python3-dev python3-venv build-essential libssl-dev libffi-dev
 
-# ADB
-echo "Downloading Android Debug Bridge"
-INSTALL_DIR="$HOME/platform-tools"
+# Installing ADB
+echo "Installing Android Debug Bridge (ADB)..."
+INSTALL_DIR="/opt/platform-tools"
 ZIP_FILE="platform-tools-latest-linux.zip"
 
 wget -c https://dl.google.com/android/repository/$ZIP_FILE -O /tmp/$ZIP_FILE
-unzip -o /tmp/$ZIP_FILE -d $HOME
+unzip -o /tmp/$ZIP_FILE -d /opt
+chown -R root:root $INSTALL_DIR
 
-# Pfad hinzufügen
-if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
-    echo "Adding $INSTALL_DIR to PATH..."
-    echo "export PATH=\"$INSTALL_DIR:\$PATH\"" >> $HOME/.bashrc
-    source $HOME/.bashrc
+# Adding ADB to system-wide PATH
+if [[ ! -f /etc/profile.d/adb.sh ]]; then
+  echo "Adding $INSTALL_DIR to system-wide PATH..."
+  echo "export PATH=\"$INSTALL_DIR:\$PATH\"" > /etc/profile.d/adb.sh
+  chmod +x /etc/profile.d/adb.sh
 fi
-rm /tmp/$ZIP_FILE
 
+# Cleanup temporary file
+rm /tmp/$ZIP_FILE
+echo "ADB installation completed and accessible to all users."
 
 echo "Configuration completed!"
 
