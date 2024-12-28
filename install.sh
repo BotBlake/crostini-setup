@@ -58,19 +58,14 @@ sudo apt-get install -y python3-pip python3-dev python3-venv build-essential lib
 echo "Installing Android Debug Bridge (ADB)..."
 INSTALL_DIR="/opt/platform-tools"
 ZIP_FILE="platform-tools-latest-linux.zip"
-
 wget -c https://dl.google.com/android/repository/$ZIP_FILE -O /tmp/$ZIP_FILE
 unzip -o /tmp/$ZIP_FILE -d /opt
 chown -R root:root $INSTALL_DIR
-
-# Adding ADB to system-wide PATH
 if [[ ! -f /etc/profile.d/adb.sh ]]; then
   echo "Adding $INSTALL_DIR to system-wide PATH..."
   echo "export PATH=\"$INSTALL_DIR:\$PATH\"" > /etc/profile.d/adb.sh
   chmod +x /etc/profile.d/adb.sh
 fi
-
-# Cleanup temporary file
 rm /tmp/$ZIP_FILE
 echo "ADB installation completed and accessible to all users."
 
@@ -88,7 +83,8 @@ read -p "Do you want to install VSCode? (y/n): " answer
 if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
     echo "Installing Visual Studio Code..."
     sudo apt-get install -y gnome-keyring
-    curl -o code.deb -L http://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb
+    curl -o code.deb -L http://go.microsoft.com/fwlink/?LinkID=760868
+    DEBIAN_FRONTEND=noninteractive sudo apt install -y ./code.deb
     rm ./code.deb
 fi
 
